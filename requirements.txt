@@ -3,3 +3,5 @@ dotenv
 psycopg
 psycopg-binary
 requests
+redis
+redis-cli

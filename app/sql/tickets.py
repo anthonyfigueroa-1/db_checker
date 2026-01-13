@@ -1,6 +1,9 @@
 import psycopg, os, json
 
+from psycopg.types.json import Jsonb
+
 from app.logs import logs
+from app.redis.enque_rows import send_rows_to_queue
 
 db = os.environ["DB"]
 
@@ -11,6 +14,8 @@ def query_open_tickets() -> list:
                         FROM tickets 
                         WHERE status != 5 OR status is null""")
             tickets = cur.fetchall()
+
+            send_rows_to_queue(tickets)
 
     return tickets
 
@@ -39,12 +44,14 @@ def update_ticket_table(ticket: dict, conversations: dict | None) -> None:
                         SET conversations = %s, status = %s, priority = %s
                         WHERE id = %s
                         """,
-                        (json.dumps(conversations), status, priority, id)
+                        (Jsonb(conversations), status, priority, id)
                         )
     if status == 4:
         logs(f"Successfully updated conversations and resolved ticket ID# {id} in database")
-    if status == 5:
+    elif status == 5:
         logs(f"Successfully updated conversations and closed ticket ID# {id} in database")
+    else:
+        logs(f"Successfully updated ticket ID# {id} in database")
 
 def add_resolution_note(ticket: dict, resolution_note: str) -> None:
     id = ticket.get("id")
