@@ -36,12 +36,15 @@ def main() -> None:
 
                 case "on_hold":
                     last_message = get_latest_conversation(conversations)
-                    on_hold = place_on_hold(last_message)
-                    if on_hold is True:
-                        ticket = set_ticket_on_hold(ticket_id)
-                        update_ticket_table(ticket, conversations)
+                    if last_message:
+                        on_hold = place_on_hold(last_message)
+                        if on_hold is True:
+                            ticket = set_ticket_on_hold(ticket_id)
+                            update_ticket_table(ticket, conversations)
 
-                    elif on_hold is False:
+                        elif on_hold is False:
+                            update_ticket_table(ticket, conversations)
+                    else:
                         update_ticket_table(ticket, conversations)
                 
                 case _:

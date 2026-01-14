@@ -1,0 +1,9 @@
+services:
+
+  db_checker:
+    image: db_checker:latest
+    env_file: ./.env
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: 1
+

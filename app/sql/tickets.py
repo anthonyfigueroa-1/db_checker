@@ -50,8 +50,6 @@ def update_ticket_table(ticket: dict, conversations: dict | None) -> None:
         logs(f"Successfully updated conversations and resolved ticket ID# {id} in database")
     elif status == 5:
         logs(f"Successfully updated conversations and closed ticket ID# {id} in database")
-    else:
-        logs(f"Successfully updated ticket ID# {id} in database")
 
 def add_resolution_note(ticket: dict, resolution_note: str) -> None:
     id = ticket.get("id")
