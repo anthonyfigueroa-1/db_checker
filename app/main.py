@@ -24,11 +24,13 @@ def main() -> None:
 
         else:
             ticket = get_one_ticket(ticket_id)
+            time.sleep(1)
                     
             if not ticket:
                 continue
 
             conversations = get_ticket_conversations(ticket)
+            time.sleep(1)
 
             match job_type:
                 case "normal":
